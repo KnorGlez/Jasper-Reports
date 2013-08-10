@@ -1,0 +1,56 @@
+@SuppressWarnings("unchecked")
+  public void llenaReportePdf(OficioDTO datos,String nombre) {
+
+		
+		//Crear el mapa de parametros
+		Map<String,Object> parametros = new HashMap<String,Object>();
+
+		parametros.put("p_rfc", datos.getRfc());
+		parametros.put("p_nombre", datos.getNombre());
+		parametros.put("p_fecha", datos.getFecha());
+		parametros.put("p_tramite", datos.getTramite());
+		parametros.put("p_unidad", datos.getUnidad());
+		parametros.put("p_fraccion", datos.getFraccion());
+		parametros.put("p_fraccionTexto", datos.getFraccionTexto());
+		parametros.put("p_folio", datos.getFolio());
+		parametros.put("p_referencia", datos.getReferencia());
+		parametros.put("p_sello", datos.getSello());
+		parametros.put("p_firma", datos.getFirma());
+		parametros.put("p_cadenaOriginal", datos.getCadenaOriginal());
+		parametros.put("p_cadenaOriginalCertificado", datos.getCadenaOriginalCertificados());		
+		parametros.put("p_selloFuncionaria", datos.getSelloFuncionaria());
+		parametros.put("p_fechaEjecucion", datos.getFechaEjecucion());
+		parametros.put("p_numeroOficio", datos.getNumeroOficio());
+		parametros.put("p_fechaOficio", datos.getFechaOficio());
+		parametros.put("p_folioSifen", datos.getFolioSifen());
+		parametros.put("p_desFraccionCorta", datos.getDesFraccionCorta());
+		parametros.put("p_fechaVisto", datos.getFechaVisto());
+		parametros.put("p_fechaVistoNotificaciones", datos.getFechaVistoNotificaciones());		
+		parametros.put("p_horas", datos.getHoras());
+		parametros.put("p_minutos", datos.getMinutos());
+		parametros.put("p_certificados", datos.getCertificados().toString());
+		
+		
+		
+		 
+		
+		 String salida = "";
+	  
+		 try {
+	            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+	            String jrxmlFileName = "/reportes/"+nombre+".jasper";
+	 
+	            File archivoReporte = new File(servletContext.getRealPath(jrxmlFileName));
+	 
+	            
+	 
+	            byte bytes[] = JasperRunManager.runReportToPdf(archivoReporte.getPath(), parametros, new JREmptyDataSource());
+	 
+	            retornarFormatoPDF(bytes, nombre+"_"+datos.getTramite());
+	            salida = "Reporte generado correctamente";
+	     } catch (Exception e) {
+	            salida = "Error generando Reporte Jasper, el error del Sistema es " + e;
+	            System.out.println(salida);
+	     }
+
+	}
